@@ -1,5 +1,5 @@
 {
-  "name": "@major-mann/graphql-datasource-object",
+  "name": "@major-mann/graphql-datasource-key-value-object",
   "version": "0.0.1",
   "description": "Creates a graphql schema that operates as a key value store based on an object",
   "main": "src/index.js",
