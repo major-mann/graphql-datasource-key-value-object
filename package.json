@@ -1,0 +1,18 @@
+{
+  "name": "@major-mann/graphql-datasource-object",
+  "version": "0.0.1",
+  "description": "Creates a graphql schema that operates as a key value store based on an object",
+  "main": "src/index.js",
+  "keywords": [
+    "graphql",
+    "schema",
+    "memory",
+    "data"
+  ],
+  "author": "Calvin Mann <calvinmann+npm@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@major-mann/graphql-datasource-base": "0.0.18",
+    "uuid": "^3.3.2"
+  }
+}
