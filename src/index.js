@@ -5,7 +5,7 @@ const TYPE_NAME = 'KeyValue';
 const uuid = require('uuid');
 const createGraphqlSource = require('@major-mann/graphql-datasource-base');
 
-async function createKeyValueSource({ object, typeName }) {
+async function createKeyValueSource({ object, typeName = TYPE_NAME }) {
     if (!object || typeof object !== 'object') {
         object = Object.create(null);
     }
@@ -22,7 +22,36 @@ async function createKeyValueSource({ object, typeName }) {
         rootTypes: [typeName]
     });
 
+    const mutationType = composer.getOTC(`${typeName}Mutation`);
+    mutationType.removeField('upsert');
+    mutationType.removeField('update');
+    wrapResolver(mutationType, 'create', createWrapper);
+
     return composer;
+
+    function wrapResolver(type, name, wrapper) {
+        const resolverName = `$${name}`;
+        type.setResolver(resolverName, type.getResolver(resolverName).wrap(wrapper));
+        type.setField(name, type.getResolver(resolverName));
+    }
+
+    function createWrapper(resolver) {
+        resolver.setArgs({
+            key: 'ID!',
+            value: 'String!'
+        });
+        return resolver.wrapResolve(next => params => {
+            return next({
+                ...params,
+                args: {
+                    key: params.args.key,
+                    data: {
+                        value: params.args.value
+                    }
+                }
+            });
+        });
+    }
 
     function data() {
         return {
